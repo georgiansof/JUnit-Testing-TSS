@@ -15,17 +15,70 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven Surefire: rulează testele JUnit 5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- JaCoCo: code coverage la nivel de instrucțiune și decizie -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals><goal>prepare-agent</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals><goal>report</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- PITest: mutation testing -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>AdvancedRiskEngine</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>RiskEngineTest</param>
+                    </targetTests>
+                    <mutators>
+                        <mutator>DEFAULTS</mutator>
+                    </mutators>
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                        <outputFormat>XML</outputFormat>
+                    </outputFormats>
+                    <timestampedReports>false</timestampedReports>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

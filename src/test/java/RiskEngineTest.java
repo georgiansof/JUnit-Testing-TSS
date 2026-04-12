@@ -199,4 +199,5 @@ class RiskEngineTest {
 
         assertTrue(premium >= 1000.0);
     }
+
 }

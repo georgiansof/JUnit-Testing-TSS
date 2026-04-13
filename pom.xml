@@ -21,6 +21,13 @@
             <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>1.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -61,10 +68,12 @@
                 </dependencies>
                 <configuration>
                     <targetClasses>
-                        <param>AdvancedRiskEngine</param>
-                    </targetClasses>
+                        <param>engine.AdvancedRiskEngine</param> </targetClasses>
                     <targetTests>
-                        <param>*Test</param>
+                        <param>category.*</param>
+                        <param>causeeffect.*</param>
+                        <param>ecpbva.*</param>
+                        <param>hybrid.*</param>
                     </targetTests>
                     <mutators>
                         <mutator>DEFAULTS</mutator>

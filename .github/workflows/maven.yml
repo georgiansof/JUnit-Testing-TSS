@@ -1,4 +1,4 @@
-name: Java CI with Coverage and Mutation Testing
+name: TSS Master CI - 100% Coverage & Mutation
 
 on:
   push:
@@ -7,44 +7,109 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  build:
+  # ==========================================
+  # JOB 1: Teste ECP & BVA
+  # ==========================================
+  test-ecpbva:
+    name: Run ECP & BVA Tests
     runs-on: ubuntu-latest
-
     steps:
-    # 1. Grab your code
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run ECP & BVA Only
+        run: mvn -B clean test -Dtest="ecpbva.**"
+      - name: Upload ECPBVA JaCoCo
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-ecpbva
+          path: target/site/jacoco/
+          retention-days: 7
 
-    # 2. Set up Java
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: maven
+  # ==========================================
+  # JOB 2: Teste Category Partitioning
+  # ==========================================
+  test-category:
+    name: Run Category Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run Category Only
+        run: mvn -B clean test -Dtest="category.**"
+      - name: Upload Category JaCoCo
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-category
+          path: target/site/jacoco/
+          retention-days: 7
 
-    # 3. Run normal tests + JaCoCo coverage
-    - name: Run Tests & JaCoCo
-      run: mvn -B clean test
+  # ==========================================
+  # JOB 3: Teste Cause-Effect
+  # ==========================================
+  test-causeeffect:
+    name: Run Cause-Effect Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run Cause-Effect Only
+        run: mvn -B clean test -Dtest="causeeffect.**"
+      - name: Upload Cause-Effect JaCoCo
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-causeeffect
+          path: target/site/jacoco/
+          retention-days: 7
 
-    # 4. Run PITest (Mutation testing)
-    - name: Run PITest
-      run: mvn -B test-compile org.pitest:pitest-maven:mutationCoverage
-
-    # 5. Save the JaCoCo report so you can download it
-    - name: Upload JaCoCo Report
-      uses: actions/upload-artifact@v4
-      if: always() # This ensures it uploads even if a test fails
-      with:
-        name: jacoco-coverage-report
-        path: target/site/jacoco/
-        retention-days: 14
-
-    # 6. Save the PITest report so you can download it
-    - name: Upload PITest Report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: pitest-mutation-report
-        path: target/pit-reports/
-        retention-days: 14
+  # ==========================================
+  # JOB 4: The Ultimate Mutant Killer (All Tests)
+  # ==========================================
+  mutation-testing:
+    name: Run All Tests & PITest
+    # Dacă vrei ca PITest să ruleze DOAR dacă celelalte trec, decomentează linia de mai jos:
+    # needs: [test-ecpbva, test-category, test-causeeffect]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run All Tests & JaCoCo
+        run: mvn -B clean test
+      - name: Upload Final JaCoCo Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-full-report
+          path: target/site/jacoco/
+          retention-days: 7
+      - name: Run PITest
+        run: mvn -B org.pitest:pitest-maven:mutationCoverage
+      - name: Upload PITest Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pitest-mutation-report
+          path: target/pit-reports/
+          retention-days: 14

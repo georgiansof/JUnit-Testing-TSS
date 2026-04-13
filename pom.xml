@@ -13,6 +13,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -24,14 +25,12 @@
 
     <build>
         <plugins>
-            <!-- Maven Surefire: rulează testele JUnit 5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
             </plugin>
 
-            <!-- JaCoCo: code coverage la nivel de instrucțiune și decizie -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -49,7 +48,6 @@
                 </executions>
             </plugin>
 
-            <!-- PITest: mutation testing -->
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
@@ -66,7 +64,7 @@
                         <param>AdvancedRiskEngine</param>
                     </targetClasses>
                     <targetTests>
-                        <param>RiskEngineTest</param>
+                        <param>*Test</param>
                     </targetTests>
                     <mutators>
                         <mutator>DEFAULTS</mutator>

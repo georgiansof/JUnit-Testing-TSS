@@ -58,7 +58,7 @@ public class AdvancedRiskEngine {
             i++;
         }
 
-        if (loyaltyDiscount > 0.25) loyaltyDiscount = 0.25;
+        // if (loyaltyDiscount > 0.25) loyaltyDiscount = 0.25;
 
         double finalPremium = basePremium * (riskMultiplier - loyaltyDiscount);
         return Math.max(finalPremium, 500.0);

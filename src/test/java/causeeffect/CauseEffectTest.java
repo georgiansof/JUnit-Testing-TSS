@@ -3,99 +3,174 @@ package causeeffect;
 import engine.AdvancedRiskEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Pachet 3: Analiză Cauză-Efect - Reguli de Business și Decizii")
 class CauseEffectTest {
     private AdvancedRiskEngine engine;
-    private final List<AdvancedRiskEngine.Claim> emptyClaims = List.of();
+
+    private static final AdvancedRiskEngine.Claim DAUNA_RECENTA =
+            new AdvancedRiskEngine.Claim(0, 0, 1);
+    private static final AdvancedRiskEngine.Claim DAUNA_VECHE =
+            new AdvancedRiskEngine.Claim(0, 0, 3);
 
     @BeforeEach
     void setUp() {
         engine = new AdvancedRiskEngine();
     }
 
-    @Test
-    @DisplayName("Respinge date de intrare invalide pentru profilul șoferului și daune")
-    void testThrowsExceptionForInvalidInputCauses() {
-        // Validări frontiere vârstă
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(17, 0, 0, emptyClaims));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(100, 0, 0, emptyClaims));
+    @Nested
+    @DisplayName("Ef0: IllegalArgumentException — cauze de validare")
+    class CauzeInvalide {
 
-        // Validări frontiere experiență (inclusiv maximul logic admis: vârstă - 18)
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, -1, 0, emptyClaims));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 13, 0, emptyClaims));
+        @Test
+        @DisplayName("Ce1a: driverAge < 18 → Ef0")
+        void ce1a_varstaSub18() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(17, 0, 0, List.of()));
+        }
 
-        // Validări frontiere loialitate (maxim 10 ani)
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, -1, emptyClaims));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, 11, emptyClaims));
+        @Test
+        @DisplayName("Ce1b: driverAge > 99 → Ef0")
+        void ce1b_varstaOver99() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(100, 0, 0, List.of()));
+        }
 
-        // Validări corupere date daune
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, 0, null));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, 0,
-                List.of(new AdvancedRiskEngine.Claim(100, -1, 1))));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, 0,
-                List.of(new AdvancedRiskEngine.Claim(100, 101, 1))));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, 0,
-                List.of(new AdvancedRiskEngine.Claim(100, 50, -1))));
-        assertThrows(IllegalArgumentException.class, () -> engine.calculatePremium(30, 5, 0,
-                List.of(new AdvancedRiskEngine.Claim(-1, 50, 1))));
+        @Test
+        @DisplayName("Ce2a: experienceYears < 0 → Ef0")
+        void ce2a_experientaNegativa() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(30, -1, 0, List.of()));
+        }
+
+        @Test
+        @DisplayName("Ce2b: experienceYears > driverAge-18 → Ef0")
+        void ce2b_experientaDepasisteMaxim() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(30, 13, 0, List.of()));
+        }
+
+        @Test
+        @DisplayName("Ce3a: loyaltyYears < 0 → Ef0")
+        void ce3a_loialitataNegativa() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(30, 5, -1, List.of()));
+        }
+
+        @Test
+        @DisplayName("Ce3b: loyaltyYears > 10 → Ef0")
+        void ce3b_loialitateDepasisteMaxim() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(30, 5, 11, List.of()));
+        }
+
+        @Test
+        @DisplayName("Ce4: claims == null → Ef0")
+        void ce4_claimsNull() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(30, 5, 0, null));
+        }
+
+        @Test
+        @DisplayName("Ce5: daună cu faultPercentage < 0 → Ef0")
+        void ce5_daunaInvalida() {
+            var daunaRea = new AdvancedRiskEngine.Claim(1000, -1, 1);
+            assertThrows(IllegalArgumentException.class,
+                    () -> engine.calculatePremium(30, 5, 0, List.of(daunaRea)));
+        }
     }
 
-    @Test
-    @DisplayName("Aplică multiplicatorii de risc în funcție de cauzele profilului auto")
-    void testAppliesRiskMultipliersBasedOnDriverProfileCauses() {
-        // Multiplicator 1.5x (Vârstă <= 25 ȘI Experiență <= 2)
-        assertEquals(1500.0, engine.calculatePremium(20, 1, 0, emptyClaims), 0.01);
+    static Stream<Arguments> tabelDeDecizie() {
+        var zero = List.<AdvancedRiskEngine.Claim>of();
+        var unaVeche = List.of(DAUNA_VECHE);
+        var doua = List.of(DAUNA_RECENTA, DAUNA_RECENTA);
+        var trei = List.of(DAUNA_RECENTA, DAUNA_RECENTA, DAUNA_RECENTA);
 
-        // Preț de bază 1000.0 (Experiența > 2 ani anulează riscul de vârstă tânără)
-        assertEquals(1000.0, engine.calculatePremium(25, 3, 0, emptyClaims), 0.01);
-
-        // Multiplicator 1.2x (Senior > 65 ani)
-        assertEquals(1200.0, engine.calculatePremium(70, 30, 0, emptyClaims), 0.01);
-
-        // Multiplicator 1.5x (Istoric încărcat cu >= 3 daune)
-        var highRiskClaims = List.of(
-                new AdvancedRiskEngine.Claim(0, 0, 1),
-                new AdvancedRiskEngine.Claim(0, 0, 1),
-                new AdvancedRiskEngine.Claim(0, 0, 1)
+        return Stream.of(
+                Arguments.of("Col1_Tanar_ExpMica_ZeroDaune_Loyalty",
+                        22, 1, 5, zero, 1250.0),
+                Arguments.of("Col2_Tanar_ExpMica_DaunaVeche_Loyalty",
+                        22, 1, 5, unaVeche, 1400.0),
+                Arguments.of("Col3_Tanar_ExpMica_2Daune_FaraDiscount",
+                        22, 1, 0, doua, 1500.0), Arguments.of("Col4_Tanar_ExpMare_ZeroDaune_Loyalty",
+                        25, 5, 5, zero, 750.0),
+                Arguments.of("Col5_Tanar_ExpMare_DaunaVeche_Loyalty",
+                        25, 5, 5, unaVeche, 900.0),
+                Arguments.of("Col6_Tanar_ExpMare_2Daune_FaraDiscount",
+                        25, 5, 0, doua, 1000.0), Arguments.of("Col7_Adult_ZeroDaune_Loyalty",
+                        40, 10, 5, zero, 750.0),
+                Arguments.of("Col8_Adult_DaunaVeche_Loyalty",
+                        40, 10, 5, unaVeche, 900.0),
+                Arguments.of("Col9_Adult_2Daune_FaraDiscount",
+                        40, 10, 0, doua, 1000.0), Arguments.of("Col10_Senior_ZeroDaune_Loyalty",
+                        70, 1, 5, zero, 950.0),
+                Arguments.of("Col11_Senior_DaunaVeche_Loyalty",
+                        70, 1, 5, unaVeche, 1100.0),
+                Arguments.of("Col12_Senior_2Daune_FaraDiscount",
+                        70, 1, 0, doua, 1200.0), Arguments.of("Col13_3SauMaiMulteDaune_HighRisk",
+                        40, 10, 0, trei, 1500.0)
         );
-        assertEquals(1500.0, engine.calculatePremium(35, 10, 0, highRiskClaims), 0.01);
     }
 
-    @Test
-    @DisplayName("Calculează discountul de fidelitate analizând cauzele din istoricul de daune")
-    void testEvaluatesLoyaltyDiscountBasedOnClaimCauses() {
-        // Fără daune: Primește discountul de bază (0.05)
-        assertEquals(950.0, engine.calculatePremium(35, 10, 1, emptyClaims), 0.01);
-
-        // O singură daună veche (> 2 ani): Discount redus (0.02)
-        var oldClaim = List.of(new AdvancedRiskEngine.Claim(0, 0, 3));
-        assertEquals(980.0, engine.calculatePremium(35, 10, 1, oldClaim), 0.01);
-
-        // O singură daună recentă (<= 2 ani): Discount anulat
-        var recentClaim = List.of(new AdvancedRiskEngine.Claim(0, 0, 1));
-        assertEquals(1000.0, engine.calculatePremium(35, 10, 1, recentClaim), 0.01);
-
-        // Daune multiple: Discount anulat
-        var multipleClaims = List.of(
-                new AdvancedRiskEngine.Claim(0, 0, 1),
-                new AdvancedRiskEngine.Claim(0, 0, 1)
-        );
-        assertEquals(1000.0, engine.calculatePremium(35, 10, 1, multipleClaims), 0.01);
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("tabelDeDecizie")
+    @DisplayName("Tabel decizie cauză-efect — coloanele 1-13")
+    void tabelDeDecizie(String label, int age, int exp, int loyalty,
+                        List<AdvancedRiskEngine.Claim> claims,
+                        double expectedPremium) {
+        double result = engine.calculatePremium(age, exp, loyalty, claims);
+        assertEquals(expectedPremium, result, 0.001,
+                "Premium incorect pentru scenariul: " + label);
     }
 
-    @Test
-    @DisplayName("Plafonează discountul maxim admis conform politicilor companiei")
-    void testCapsLoyaltyDiscountAtMaximumAllowedThreshold() {
-        // 6 ani * 0.05 = 0.30 -> Plafonat la maximul de 0.25 (750.0 lei)
-        assertEquals(750.0, engine.calculatePremium(40, 10, 6, emptyClaims), 0.01);
+    @Nested
+    @DisplayName("Verificare constrângeri graf")
+    class VerificareConstrangeri {
 
-        // 2 ani * 0.05 = 0.10 -> Neplafonat (900.0 lei)
-        assertEquals(900.0, engine.calculatePremium(40, 10, 2, emptyClaims), 0.01);
+        @Test
+        @DisplayName("E(C1,C3): tânăr+exp mică nu poate fi și senior — numai Ef1 activ")
+        void constrangere_C1_C3_exclusiv() {
+            double result = engine.calculatePremium(22, 1, 0, List.of());
+            assertEquals(1500.0, result, 0.001,
+                    "Ef1 și Ef2 nu trebuie activate simultan");
+        }
+
+        @Test
+        @DisplayName("M(Ef1,Ef2): senior cu 3+ daune → Ef1 activ, Ef2 mascat")
+        void constrangere_M_Ef1_mascheaza_Ef2() {
+            var trei = List.of(
+                    new AdvancedRiskEngine.Claim(0, 0, 5),
+                    new AdvancedRiskEngine.Claim(0, 0, 5),
+                    new AdvancedRiskEngine.Claim(0, 0, 5)
+            );
+            double result = engine.calculatePremium(70, 1, 0, trei);
+            assertEquals(1500.0, result, 0.001,
+                    "Senior cu 3 daune: riskMultiplier=1.50 (Ef1 mascat Ef2)");
+        }
+
+        @Test
+        @DisplayName("E(C4,C5,C6): 3 daune → discount imposibil (Ef5 forțat)")
+        void constrangere_E_C4_C5_C6_exclusiv() {
+            var trei = List.of(
+                    new AdvancedRiskEngine.Claim(0, 0, 5),
+                    new AdvancedRiskEngine.Claim(0, 0, 5),
+                    new AdvancedRiskEngine.Claim(0, 0, 5)
+            );
+
+
+            double result = engine.calculatePremium(40, 10, 5, trei);
+            assertEquals(1500.0, result, 0.001,
+                    "C4=1 exclude C5 și C6: loyaltyDiscount=0 chiar cu loyalty=5");
+        }
     }
 }

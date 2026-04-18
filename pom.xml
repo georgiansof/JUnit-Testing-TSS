@@ -70,10 +70,7 @@
                     <targetClasses>
                         <param>engine.AdvancedRiskEngine</param> </targetClasses>
                     <targetTests>
-                        <param>category.*</param>
-                        <param>causeeffect.*</param>
-                        <param>ecpbva.*</param>
-                        <param>hybrid.*</param>
+                        <param>cfg.*</param>
                     </targetTests>
                     <mutators>
                         <mutator>DEFAULTS</mutator>

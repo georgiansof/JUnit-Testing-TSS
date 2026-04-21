@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== SECTION LABELS ===== -->
+    <mxCell id="s1" value="CAUZE DE VALIDARE" style="text;fontStyle=1;fontSize=12;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="40" y="20" width="220" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="s2" value="CAUZE DE RISC" style="text;fontStyle=1;fontSize=12;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="40" y="370" width="220" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="s3" value="CAUZE DE DISCOUNT" style="text;fontStyle=1;fontSize=12;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="40" y="680" width="220" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="s4" value="EFECTE" style="text;fontStyle=1;fontSize=12;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="20" width="120" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- ===== CAUZE DE VALIDARE ===== -->
+    <mxCell id="Ce1" value="Ce1&#xa;age &lt;18 ∨ age &gt;99" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="60" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="Ce2" value="Ce2&#xa;exp &lt;0 ∨ exp &gt;(age-18)" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="135" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="Ce3" value="Ce3&#xa;loyalty &lt;0 ∨ loyalty &gt;10" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="210" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="Ce4" value="Ce4&#xa;claims == null" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="285" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="Ce5" value="Ce5&#xa;∃ daună invalidă" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="360" width="200" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- OR operator for validation -->
+    <mxCell id="or_val" value="∨" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="540" y="195" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- Lines Ce → OR_val -->
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Ce1" target="or_val">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Ce2" target="or_val">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Ce3" target="or_val">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Ce4" target="or_val">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="Ce5" target="or_val">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Ef0 -->
+    <mxCell id="Ef0" value="Ef0&#xa;aruncă excepție" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="195" width="160" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="or_val" target="Ef0">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ===== CAUZE DE RISC ===== -->
+    <mxCell id="C1" value="C1&#xa;(age≤25 &amp;&amp; exp≤2) || size≥3" style="ellipse;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="470" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="C2" value="C2&#xa;driverAge &gt; 65" style="ellipse;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="560" width="200" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- Ef1 -->
+    <mxCell id="Ef1" value="Ef1&#xa;riskMultiplier += 0.50&#xa;(HIGH RISK)" style="ellipse;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="460" width="160" height="70" as="geometry" />
+    </mxCell>
+    <!-- Ef2 -->
+    <mxCell id="Ef2" value="Ef2&#xa;riskMultiplier += 0.20&#xa;(SENIOR)" style="ellipse;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="560" width="160" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C1" target="Ef1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C2" target="Ef2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ===== CAUZE DE DISCOUNT ===== -->
+    <mxCell id="C3" value="C3&#xa;claims.isEmpty()" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="720" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="C4" value="C4&#xa;size==1 &amp;&amp; yearsAgo&gt;2" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="800" width="200" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="C7" value="C7&#xa;loyaltyYears ≥ 1" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="880" width="200" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- AND operators for discount -->
+    <mxCell id="and_37" value="∧" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="540" y="720" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="and_47" value="∧" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="540" y="810" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C3" target="and_37">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C7" target="and_37">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C4" target="and_47">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C7" target="and_47">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Ef3, Ef4, Ef5 -->
+    <mxCell id="Ef3" value="Ef3&#xa;discount 5%/an" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="710" width="160" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="Ef4" value="Ef4&#xa;discount 2%/an" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="800" width="160" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="Ef5" value="Ef5&#xa;fără discount&#xa;(¬Ef3 ∧ ¬Ef4)" style="ellipse;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+      <mxGeometry x="1380" y="890" width="160" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="and_37" target="Ef3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="and_47" target="Ef4">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ===== CONSTRAINTS ===== -->
+    <!-- E(C1, C2) -->
+    <mxCell id="const_E1" value="E" style="text;fontStyle=1;fontSize=14;fillColor=none;strokeColor=none;fontColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="270" y="505" width="30" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="const_e1_line" style="edgeStyle=elbowEdgeStyle;elbow=vertical;dashed=1;strokeColor=#b85450;endArrow=none;" edge="1" parent="1" source="C1" target="C2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- E(C3, C4) -->
+    <mxCell id="const_E2" value="E" style="text;fontStyle=1;fontSize=14;fillColor=none;strokeColor=none;fontColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="270" y="755" width="30" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="const_e2_line" style="edgeStyle=elbowEdgeStyle;elbow=vertical;dashed=1;strokeColor=#82b366;endArrow=none;" edge="1" parent="1" source="C3" target="C4">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- M(Ef1, Ef2) -->
+    <mxCell id="const_M" value="M" style="text;fontStyle=1;fontSize=14;fillColor=none;strokeColor=none;fontColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="1560" y="510" width="30" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="const_m_line" style="edgeStyle=elbowEdgeStyle;elbow=vertical;dashed=1;strokeColor=#d79b00;endArrow=open;endFill=0;" edge="1" parent="1" source="Ef1" target="Ef2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ===== LEGEND ===== -->
+    <mxCell id="leg" value="Legendă" style="swimlane;fontStyle=1;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="40" y="980" width="360" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="leg1" value="Cauze de validare → Ef0" style="text;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=left;spacingLeft=4;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="30" width="350" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg2" value="Cauze de risc → Ef1, Ef2" style="text;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;align=left;spacingLeft=4;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="60" width="350" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg3" value="Cauze de discount → Ef3, Ef4" style="text;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=left;spacingLeft=4;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="90" width="350" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg4" value="E = exclusiv | M = maschează | ∧ = AND | ∨ = OR" style="text;fillColor=none;strokeColor=none;fontSize=11;align=left;spacingLeft=4;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="120" width="350" height="25" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

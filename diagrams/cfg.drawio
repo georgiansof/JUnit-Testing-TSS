@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- EX node -->
+    <mxCell id="EX" value="EX&#xa;throws IllegalArgumentException" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="400" width="200" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- N1 -->
+    <mxCell id="N1" value="N1&#xa;age &lt;18 || age &gt;99?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="40" width="220" height="50" as="geometry" />
+    </mxCell>
+    <!-- N1 T → EX -->
+    <mxCell id="n1t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1" source="N1" target="EX">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- N1 F → N2 -->
+    <mxCell id="n1f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N1" target="N2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N2 -->
+    <mxCell id="N2" value="N2&#xa;exp &lt;0 || exp &gt;(age-18)?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="120" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n2t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1" source="N2" target="EX">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n2f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N2" target="N3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N3 -->
+    <mxCell id="N3" value="N3&#xa;loyalty &lt;0 || loyalty &gt;10?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="200" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n3t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1" source="N3" target="EX">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n3f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N3" target="N4">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N4 -->
+    <mxCell id="N4" value="N4&#xa;claims == null?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="280" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n4t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1" source="N4" target="EX">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n4f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N4" target="N5">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N5 — init -->
+    <mxCell id="N5" value="N5&#xa;basePremium=1000; riskMult=1.0" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="360" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n5n6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N5" target="N6">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N6 — HIGH RISK -->
+    <mxCell id="N6" value="N6&#xa;(age≤25 &amp;&amp; exp≤2) || size≥3?" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="440" width="220" height="50" as="geometry" />
+    </mxCell>
+    <!-- N6 T → N7 action -->
+    <mxCell id="N7" value="N7&#xa;riskMult += 0.50" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="740" y="440" width="160" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n6t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d79b00;fontColor=#d79b00;" edge="1" parent="1" source="N6" target="N7">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n6f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N6" target="N8">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N8 — SENIOR -->
+    <mxCell id="N8" value="N8&#xa;driverAge &gt; 65?" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="520" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="N9" value="N9&#xa;riskMult += 0.20" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="740" y="520" width="160" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n8t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;fontColor=#9673a6;" edge="1" parent="1" source="N8" target="N9">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n8f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N8" target="N10">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Merge N7, N9 → N10 -->
+    <mxCell id="n7merge" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N7" target="N10">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n9merge" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N9" target="N10">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N10 — for init -->
+    <mxCell id="N10" value="N10&#xa;claimsPenalty=0; i=0" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="610" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n10n11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N10" target="N11">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N11 — for condition -->
+    <mxCell id="N11" value="N11&#xa;i &lt; claims.size()?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="690" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n11f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N11" target="N14">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="740" y="715" />
+          <mxPoint x="740" y="855" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="n11t" value="T" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N11" target="N12">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N12 — daună invalidă -->
+    <mxCell id="N12" value="N12&#xa;daună invalidă?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="770" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n12t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1" source="N12" target="EX">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n12f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N12" target="N13">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N13 — penalty + i++ -->
+    <mxCell id="N13" value="N13&#xa;penalty += ...; i++" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="850" width="220" height="50" as="geometry" />
+    </mxCell>
+    <!-- Back-edge N13 → N11 -->
+    <mxCell id="back_for" value="back-edge" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#1D9E75;fontColor=#1D9E75;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="N13" target="N11">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="380" y="875" />
+          <mxPoint x="380" y="715" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- N14 — loyalty init -->
+    <mxCell id="N14" value="N14&#xa;riskMult+=penalty; loyalty init" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="940" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n14n15" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N14" target="N15">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N15 — while condition -->
+    <mxCell id="N15" value="N15&#xa;i ≤ maxDiscountYears?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="1020" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n15f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N15" target="N21">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="740" y="1045" />
+          <mxPoint x="740" y="1285" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="n15t" value="T" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N15" target="N16">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N16 — isEmpty -->
+    <mxCell id="N16" value="N16&#xa;claims.isEmpty()?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="1100" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="N17" value="N17&#xa;discount += 0.05" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="740" y="1100" width="160" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n16t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;fontColor=#82b366;" edge="1" parent="1" source="N16" target="N17">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n16f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N16" target="N18">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N18 — 1 daună veche -->
+    <mxCell id="N18" value="N18&#xa;size==1 &amp;&amp; yearsAgo&gt;2?" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="1180" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="N19" value="N19&#xa;discount += 0.02" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="740" y="1180" width="160" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n18t" value="T" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;fontColor=#82b366;" edge="1" parent="1" source="N18" target="N19">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n18f" value="F" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N18" target="N20">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- N20 — i++ -->
+    <mxCell id="N20" value="N20&#xa;i++" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="1260" width="220" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="n17merge" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N17" target="N20">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="n19merge" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N19" target="N20">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Back-edge N20 → N15 -->
+    <mxCell id="back_while" value="back-edge" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#1D9E75;fontColor=#1D9E75;dashed=1;endArrow=block;endFill=1;" edge="1" parent="1" source="N20" target="N15">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="370" y="1285" />
+          <mxPoint x="370" y="1045" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- N21 — return -->
+    <mxCell id="N21" value="N21&#xa;return max(premium, 500.0)" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="1350" width="220" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="n20n21" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="N20" target="N21">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="740" y="1285" />
+          <mxPoint x="740" y="1380" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Legend -->
+    <mxCell id="leg" value="Legendă" style="swimlane;fontStyle=1;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="840" y="600" width="280" height="180" as="geometry" />
+    </mxCell>
+    <mxCell id="leg1" value="Nod de decizie" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="30" width="270" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg2" value="Nod de acțiune / secvență" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="60" width="270" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg3" value="Nod de return" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="90" width="270" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg4" value="Excepție" style="ellipse;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="120" width="270" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="leg5" value="Back-edge (buclă)" style="text;strokeColor=#1D9E75;fillColor=none;fontSize=11;fontColor=#1D9E75;align=left;spacingLeft=4;" vertex="1" parent="leg">
+      <mxGeometry x="5" y="150" width="270" height="25" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

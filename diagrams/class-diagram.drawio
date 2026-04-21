@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- AdvancedRiskEngine -->
+    <mxCell id="2" value="AdvancedRiskEngine" style="swimlane;fontStyle=1;align=center;startSize=30;swimlaneLine=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="360" y="40" width="320" height="140" as="geometry" />
+    </mxCell>
+    <mxCell id="3" value="+ calculatePremium(driverAge: int, experienceYears: int, loyaltyYears: int, claims: List&lt;Claim&gt;): double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="2">
+      <mxGeometry x="0" y="30" width="320" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="4" value="- basePremium: double = 1000.0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="2">
+      <mxGeometry x="0" y="90" width="320" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="5" value="- riskMultiplier: double&#xa;- claimsPenalty: double&#xa;- loyaltyDiscount: double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="2">
+      <mxGeometry x="0" y="110" width="320" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Claim (inner class) -->
+    <mxCell id="6" value="Claim" style="swimlane;fontStyle=1;align=center;startSize=30;swimlaneLine=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="360" y="260" width="320" height="130" as="geometry" />
+    </mxCell>
+    <mxCell id="7" value="+ amount: double&#xa;+ faultPercentage: int&#xa;+ yearsAgo: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="6">
+      <mxGeometry x="0" y="30" width="320" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="8" value="+ Claim(amount: double, faultPercentage: int, yearsAgo: int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="6">
+      <mxGeometry x="0" y="90" width="320" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- BrokerCLI -->
+    <mxCell id="9" value="BrokerCLI" style="swimlane;fontStyle=1;align=center;startSize=30;swimlaneLine=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="760" y="40" width="320" height="110" as="geometry" />
+    </mxCell>
+    <mxCell id="10" value="+ main(args: String[]): void&#xa;- processClient(engine: AdvancedRiskEngine, c: Client): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="9">
+      <mxGeometry x="0" y="30" width="320" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Client (inner class of BrokerCLI) -->
+    <mxCell id="11" value="Client" style="swimlane;fontStyle=1;align=center;startSize=30;swimlaneLine=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="760" y="230" width="320" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="12" value="+ name: String&#xa;+ age: int&#xa;+ experience: int&#xa;+ loyaltyYears: int&#xa;+ claims: List&lt;Claim&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="11">
+      <mxGeometry x="0" y="30" width="320" height="90" as="geometry" />
+    </mxCell>
+    <mxCell id="13" value="+ Client(name, age, experience, loyaltyYears, claims)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="11">
+      <mxGeometry x="0" y="120" width="320" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- AdvancedRiskEngine uses Claim (composition) -->
+    <mxCell id="14" value="uses" style="edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;dashed=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="2" target="6">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- BrokerCLI uses AdvancedRiskEngine -->
+    <mxCell id="15" value="uses" style="edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;dashed=1;strokeColor=#d6b656;" edge="1" parent="1" source="9" target="2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- BrokerCLI contains Client -->
+    <mxCell id="16" value="inner class" style="edgeStyle=orthogonalEdgeStyle;endArrow=diamondThin;endFill=1;strokeColor=#d79b00;" edge="1" parent="1" source="9" target="11">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- AdvancedRiskEngine contains Claim -->
+    <mxCell id="17" value="inner class" style="edgeStyle=orthogonalEdgeStyle;endArrow=diamondThin;endFill=1;strokeColor=#82b366;" edge="1" parent="1" source="2" target="6">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Client uses Claim -->
+    <mxCell id="18" value="uses" style="edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="11" target="6">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Legend -->
+    <mxCell id="19" value="Legendă" style="swimlane;fontStyle=1;align=center;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+      <mxGeometry x="40" y="40" width="240" height="130" as="geometry" />
+    </mxCell>
+    <mxCell id="20" value="Clasă principală testată" style="text;strokeColor=none;fillColor=#dae8fc;align=left;fontSize=11;spacingLeft=4;" vertex="1" parent="19">
+      <mxGeometry x="5" y="30" width="230" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="21" value="Clasă inner (testată indirect)" style="text;strokeColor=none;fillColor=#d5e8d4;align=left;fontSize=11;spacingLeft=4;" vertex="1" parent="19">
+      <mxGeometry x="5" y="55" width="230" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="22" value="Interfață CLI (netestată)" style="text;strokeColor=none;fillColor=#fff2cc;align=left;fontSize=11;spacingLeft=4;" vertex="1" parent="19">
+      <mxGeometry x="5" y="80" width="230" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="23" value="Clasă inner CLI (netestată)" style="text;strokeColor=none;fillColor=#ffe6cc;align=left;fontSize=11;spacingLeft=4;" vertex="1" parent="19">
+      <mxGeometry x="5" y="105" width="230" height="25" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

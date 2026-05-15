@@ -613,65 +613,64 @@ necesare pentru a obține branch coverage complet.
 
 #### Graful de flux de control (CFG)
 
-![CFG calculatePremium](diagrams/cfg.drawio.png)
+![CFG calculatePremium](diagrams/final.drawio.png)
 
 > Diagramă realizată cu diagrams.net
 
 Nodurile decizionale identificate:
 
-```
-N1:  driverAge < 18 || driverAge > 99
-N2:  experienceYears < 0 || experienceYears > (driverAge-18)
-N3:  loyaltyYears < 0 || loyaltyYears > 10
-N4:  claims == null
-N5:  (driverAge<=25 && experienceYears<=2) || claims.size()>=3
-N6:  driverAge > 65
-N7:  i < claims.size()                      [for condition]
-N8:  c.faultPercentage < 0 || ...           [daună invalidă]
-N9:  i <= maxDiscountYears                  [while condition]
-N10: claims.isEmpty()
-N11: claims.size()==1 && yearsAgo > 2
-EX:  throws IllegalArgumentException
-```
+| Nod | Instrucțiune |
+|---|---|
+| 1 | `if (driverAge < 18 \|\| driverAge > 99)` |
+| 2 | `throw new IllegalArgumentException("Vârstă invalidă")` |
+| 3 | `if (experienceYears < 0 \|\| experienceYears > (driverAge - 18))` |
+| 4 | `throw new IllegalArgumentException("Experiență invalidă")` |
+| 5 | `if (loyaltyYears < 0 \|\| loyaltyYears > 10)` |
+| 6 | `throw new IllegalArgumentException("Ani loialitate în afara limitelor [0, 10]")` |
+| 7 | `if (claims == null)` |
+| 8 | `throw new IllegalArgumentException("Istoricul daunelor nu poate fi null")` |
+| 9 | `if ((driverAge <= 25 && experienceYears <= 2) \|\| claims.size() >= 3)` |
+| 11 | `{...}` |
+| 10 | `else if (driverAge > 65)` |
+| 12 | `{...}` |
+| 13 | `for (int i = 0; i < claims.size(); i++)` |
+| 14 | `if (c.faultPercentage < 0 \|\| c.faultPercentage > 100 \|\| c.yearsAgo < 0 \|\| c.amount < 0)` |
+| 15 | `throw new IllegalArgumentException("Date daună invalide")` |
+| 16 | `{...}` |
+| 17 | `while (i <= maxDiscountYears)` |
+| 18 | `if (claims.isEmpty())` |
+| 19 | `{...}` |
+| 20 | `else if (claims.size() == 1 && claims.get(0).yearsAgo > 2)` |
+| 21 | `{...}` |
+| 22 | `else {...}` |
+| 23 | `return Math.max(finalPremium, 500.0)` |
+| 24 | `END` |
 
 #### Calculul complexității ciclomatice
 
 ```
 V(G) = e - n + 2
-V(G) = 34 - 22 + 2 = 14
+V(G) = 34 - 24 + 2 = 12
 ```
 
-unde `n = 22` noduri și `e = 34` muchii.
+unde `n = 24` noduri și `e = 34` muchii. Valoarea 12 indică prezența a 12 circuite liniar independente în cadrul grafului de flux de control. Această valoare identifică limita superioară a numărului de căi necesare pentru obținerea unei acoperiri complete la nivel de ramură (Branch Coverage).
 
-V(G) = 14 este mai mare decât exemplul din curs (V=7 pentru `MyClass`)
-deoarece `calculatePremium` are mai mulți predicați (11 vs ~6) și mai
-multe puncte de ieșire (6 `throw`-uri + 1 `return` = 7 exits față de
-1 în `MyClass`). Fiecare exit suplimentar față de unul adaugă 1 la V(G).
+#### Setul de bază al circuitelor independente
 
-#### Cele 14 circuite independente
-
-| # | Circuit | Cale |
+| # | Descriere | Cale (Noduri) |
 |---|---|---|
-| C1 | Baseline — niciun risc, nicio daună, nicio loialitate | N1F→N2F→N3F→N4F→N5→N6F→N8F→N10→N11F→N14→N15F→N21 |
-| C2 | D1=T — vârstă invalidă | N1→EX |
-| C3 | D2=T — experiență invalidă | N1F→N2→EX |
-| C4 | D3=T — loialitate invalidă | →N3→EX |
-| C5 | D4=T — claims null | →N4→EX |
-| C6 | D5=T — HIGH RISK | N5→N7→... |
-| C7 | D6=T — SENIOR | N5F→N6→... |
-| C8 | D7=T, D8=F — for body, daună validă | N7→N8F→N7F→... |
-| C9 | D8=T — daună invalidă în buclă | N7→N8→EX |
-| C10 | D9=T, D10=T — while + isEmpty | N9→N10→... |
-| C11 | D9=T, D10=F, D11=T — discount 2% | N9→N10F→N11→... |
-| C12 | D9=T, D10=F, D11=F — fără discount | N9→N10F→N11F→... |
-| C13 | Back-edge for — bucla for rulează ≥ 2× | N7→N8F→N7→... |
-| C14 | Back-edge while — bucla while rulează ≥ 2× | N9→...→N9→... |
-
-Circuitele C2–C5 acoperă punctele de ieșire timpurie (exception paths).
-C6 și C7 acoperă ramurile `if-else if` de risc. C8–C9 acoperă ambele
-ramuri ale for-body. C10–C12 acoperă toate combinațiile din while-body.
-C13 și C14 acoperă back-edge-urile buclelor — esența testării structurale
-a buclelor, distincte față de C8/C10 care testează intrarea în buclă.
+| C1 | Excepție Vârstă | 1, 2, 24 |
+| C2 | Excepție Experiență | 1, 3, 4, 24 |
+| C3 | Excepție Loialitate | 1, 3, 5, 6, 24 |
+| C4 | Excepție Daune null | 1, 3, 5, 7, 8, 24 |
+| C5 | Risc standard, fără bucle executate | 1, 3, 5, 7, 9, 10, 13, 17, 23, 24 |
+| C6 | Risc ridicat (Tânăr/Daune multiple) | 1, 3, 5, 7, 9, 11, 13, 17, 23, 24 |
+| C7 | Risc vârstnic | 1, 3, 5, 7, 9, 10, 12, 13, 17, 23, 24 |
+| C8 | Excepție în bucla for (Date invalide) | 1, 3, 5, 7, 9, 10, 13, 14, 15, 24 |
+| C9 | Execuție validă buclă for | 1, 3, 5, 7, 9, 10, 13, 14, 16, 13, 17, 23, 24 |
+| C10 | Buclă while, reducere fără daune | 1, 3, 5, 7, 9, 10, 13, 17, 18, 19, 22, 17, 23, 24 |
+| C11 | Buclă while, reducere pt. 1 daună veche | 1, 3, 5, 7, 9, 10, 13, 17, 18, 20, 21, 22, 17, 23, 24 |
+| C12 | Buclă while, bypass condiții reducere | 1, 3, 5, 7, 9, 10, 13, 17, 18, 20, 22, 17, 23, 24 |
 
 > Un set de bază nu este unic — pot exista alte 14 circuite independente
 > valide. Orice set de bază care acoperă toate muchiile este suficient
@@ -679,7 +678,7 @@ a buclelor, distincte față de C8/C10 care testează intrarea în buclă.
 
 #### Garanții ale metodei
 
-| Tip coverage | Garantat de V(G)=14 circuite |
+| Tip coverage | Garantat de V(G)=12 circuite |
 |---|---|
 | Statement coverage | DA — 100% |
 | Branch coverage | DA — 100% la nivel de decizie globală |
@@ -694,36 +693,35 @@ a buclelor, distincte față de C8/C10 care testează intrarea în buclă.
 #### Teste BVA suplimentare pentru mutanți
 
 Analiza raportului PIT a identificat 2 mutanți neechivalenți
-supraviețuitori după rularea celor 14 circuite. Au fost adăugate 2 teste
+supraviețuitori după rularea celor 12 circuite. Au fost adăugate 2 teste
 BVA pentru a-i ucide:
 
-**Mutanții de pe linia 29** (`ConditionalsBoundaryMutator`):
+**Mutantul de pe linia 31** (`ConditionalsBoundaryMutator`):
 ```java
 // Original:
-if ((driverAge <= 25 && experienceYears <= 2) || claims.size() >= 3)
-
-// Mutant idx71: driverAge <= 25 → driverAge < 25
-// Mutant idx74: experienceYears <= 2 → experienceYears < 2
+} else if (driverAge > 65)
+// Mutant idx94: driverAge > 65 → driverAge >= 65
 ```
-Test killer: `age=25, exp=2` → `1500.0`  
-Frontiera exactă `age=25` și `exp=2` face ca ambii mutanți să producă
-`1000.0` în loc de `1500.0` → detectați.
+Test killer: `age=65, exp=40` → `1000.0`  
+Cu `age=65`, originalul evaluează `65 > 65` → fals → niciun bonus →
+`1000.0`. Mutantul evaluează `65 >= 65` → adevărat → riskMultiplier+=0.20 →
+`1200.0` ≠ `1000.0` → detectat.
 
-**Mutantul de pe linia 56** (`ConditionalsBoundaryMutator`):
+**Mutantul de pe linia 44** (`MathMutator`):
 ```java
 // Original:
-} else if (claims.size() == 1 && claims.get(0).yearsAgo > 2)
-
-// Mutant idx240: yearsAgo > 2 → yearsAgo >= 2
+double severityPoints = (c.amount * (c.faultPercentage / 100.0)) / 1000.0;
+// Mutant idx170: c.amount * (c.faultPercentage / 100.0) → c.amount / (c.faultPercentage / 100.0)
 ```
-Test killer: `yearsAgo=2, loyalty=1` → `1000.0`  
-Cu mutantul activ, `yearsAgo=2` satisface `>= 2` și produce discount →
-`980.0` ≠ `1000.0` → detectat.
+Test killer: `amount=100, fault=50, yearsAgo=0` → `1000.5`  
+Cu `amount=100, fault=50`, originalul calculează `100 * 0.5 = 50` → `50/1000=0.05` →
+`0.05*1.0*0.01=0.0005` → `1000*1.0005=1000.5`. Mutantul calculează `100 / 0.5 = 200` →
+`200/1000=0.2` → `0.2*1.0*0.01=0.002` → `1000*1.002=1002.0` ≠ `1000.5` → detectat.
 
 #### Fișier de teste
 
-`src/test/java/cfg/CfgTest.java` — 16 teste:
-- 14 teste CFG (C1–C14), câte unul per circuit independent
+`src/test/java/cfg/CfgTest.java` — 14 teste:
+- 12 teste CFG (C1–C12), câte unul per circuit independent
   - 2 teste BVA suplimentare pentru uciderea mutanților neechivalenți
 
 ## 5. Rezultate
@@ -742,7 +740,7 @@ suita de teste și nu este luată în calcul.
 | `EcpBvaTest` | 100% (2/2) | 100% (2/2) | 100% (34/34) | 97% (39/40) |
 | `CategoryPartitioningTest` | 100% (2/2) | 100% (2/2) | 100% (34/34) | 100% (40/40) |
 | `CauseEffectTest` | 100% (2/2) | 100% (2/2) | 100% (34/34) | 90% (36/40) |
-| `CfgTest` | 100% (2/2) | 100% (2/2) | 100% (34/34) | 80% (32/40) |
+| `CfgTest` | 100% (2/2) | 100% (2/2) | 100% (34/34) | 77% (32/40) |
 
 **Rezultate globale (toate pachetele împreună):**
 

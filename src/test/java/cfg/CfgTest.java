@@ -84,4 +84,15 @@ public class CfgTest {
                 List.of(new AdvancedRiskEngine.Claim(1000, 100, 1)))
         );
     }
+
+    @Test
+    void killLine31_BoundaryMutant() {
+        assertEquals(1000.0, engine.calculatePremium(65, 40, 0, List.of()));
+    }
+
+    @Test
+    void killLine44_MultiplicationMutant() {
+        assertEquals(1000.5, engine.calculatePremium(30, 5, 0,
+                List.of(new AdvancedRiskEngine.Claim(100, 50, 0))));
+    }
 }

@@ -1,5 +1,9 @@
 # Testare unitară în Java — AdvancedRiskEngine
 
+## Demo
+
+https://github.com/user-attachments/assets/59773978-57e3-4eb5-b3f7-995736aa37de
+
 ## 1. Introducere
 
 ### 1.1 Descrierea proiectului
